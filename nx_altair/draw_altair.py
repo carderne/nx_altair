@@ -60,24 +60,23 @@ def draw_networkx_edges(
         df_edges = to_pandas_edges(G, pos)
 
         # Build a chart
+        if isinstance(edgelist, list):
+            df_edges = df_edges.loc[df_edges["pair"].isin(edgelist)]
+        elif edgelist is not None:
+            raise Exception("nodelist must be a list or None.")
         edge_chart = alt.Chart(df_edges)
     else:
         df_edges = chart.layer[0].data
+        if isinstance(edgelist, list):
+            df_edges = df_edges.loc[df_edges["pair"].isin(edgelist)]
+        elif edgelist is not None:
+            raise Exception("nodelist must be a list or None.")
         edge_chart = chart.layer[0]
 
     marker_attrs = {}
     encoded_attrs = {}
 
     # ---------- Handle arguments ------------
-
-    # node list argument
-    if isinstance(edgelist, list):
-        # Subset dataframe.
-        df_edges = df_edges.loc[df_edges["pair"].isin(edgelist)]
-
-    elif edgelist is not None:
-        raise Exception("nodelist must be a list or None.")
-
     # Node size
     if isinstance(width, str):
         encoded_attrs["size"] = alt.Size(width, legend=None)
@@ -192,28 +191,24 @@ def draw_networkx_arrows(
     viz: ``altair.Chart`` object
     """
     if chart is None:
-        # Pandas dataframe of edges
         df_edge_arrows = to_pandas_edges_arrows(G, pos, arrow_length)
-
-        # Build a chart
+        if isinstance(edgelist, list):
+            df_edge_arrows = df_edge_arrows.loc[df_edge_arrows["pair"].isin(edgelist)]
+        elif edgelist is not None:
+            raise Exception("nodelist must be a list or None.")
         edge_chart = alt.Chart(df_edge_arrows)
     else:
         df_edge_arrows = chart.layer[0].data
+        if isinstance(edgelist, list):
+            df_edge_arrows = df_edge_arrows.loc[df_edge_arrows["pair"].isin(edgelist)]
+        elif edgelist is not None:
+            raise Exception("nodelist must be a list or None.")
         edge_chart = chart.layer[0]
 
     marker_attrs = {}
     encoded_attrs = {}
 
     # ---------- Handle arguments ------------
-
-    # node list argument
-    if isinstance(edgelist, list):
-        # Subset dataframe.
-        df_edge_arrows = df_edge_arrows.loc[df_edge_arrows["pair"].isin(edgelist)]
-
-    elif edgelist is not None:
-        raise Exception("nodelist must be a list or None.")
-
     # Node size
     if isinstance(arrow_width, str):
         encoded_attrs["size"] = alt.Size(arrow_width, legend=None)
