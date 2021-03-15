@@ -538,6 +538,7 @@ def draw_networkx(
     node_tooltip=None,
     edge_tooltip=None,
     edge_cmap=None,
+    interactive=False,
 ):
     """Draw the graph G using Altair.
 
@@ -601,6 +602,9 @@ def draw_networkx(
 
     edge_cmap : Matplotlib colormap, optional (default=None)
        Colormap for mapping intensities of edges
+
+    interactive : boolean, option (default=False)
+       Whether to make the chart interactive
     """
     if not pos:
         pos = nx.drawing.layout.spring_layout(G)
@@ -668,6 +672,9 @@ def draw_networkx(
         viz.append(nodes)
         if node_label:
             viz.append(labels)
+
+    if interactive:
+        viz = [v.interactive() for v in viz]
 
     if viz:
         viz = alt.layer(*viz)
