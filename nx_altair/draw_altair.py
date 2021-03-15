@@ -1,4 +1,5 @@
 import altair as alt
+from altair.utils.schemapi import Undefined
 import networkx as nx
 
 from .core import to_pandas_edges, to_pandas_edges_arrows, to_pandas_nodes
@@ -16,6 +17,11 @@ def draw_networkx_edges(
     edge_cmap=None,
     tooltip=None,
     legend=False,
+    x_axis_title="",
+    x_axis_grid=False,
+    x_axis_labels=False,
+    x_axis_ticks=False,
+    x_axis_scale=None,
     **kwargs
 ):
     """Draw the edges of the graph G.
@@ -121,9 +127,23 @@ def draw_networkx_edges(
 
     # ---------- Construct visualization ------------
 
+    if x_axis_scale:
+        x_axis_scale = alt.Scale(domain=x_axis_scale)
+    else:
+        x_axis_scale = Undefined
+
     # Draw edges
     edge_chart = edge_chart.mark_line(**marker_attrs).encode(
-        x=alt.X("x", axis=alt.Axis(title="", grid=False, labels=False, ticks=False)),
+        x=alt.X(
+            "x",
+            axis=alt.Axis(
+                title=x_axis_title,
+                grid=x_axis_grid,
+                labels=x_axis_labels,
+                ticks=x_axis_ticks,
+            ),
+            scale=x_axis_scale,
+        ),
         y=alt.Y("y", axis=alt.Axis(title="", grid=False, labels=False, ticks=False)),
         detail="edge",
         **encoded_attrs
@@ -279,6 +299,11 @@ def draw_networkx_nodes(
     alpha=1,
     cmap=None,
     tooltip=None,
+    x_axis_title="",
+    x_axis_grid=False,
+    x_axis_labels=False,
+    x_axis_ticks=False,
+    x_axis_scale=None,
     **kwargs
 ):
     """Draw the nodes of the graph G.
@@ -396,8 +421,22 @@ def draw_networkx_nodes(
     marker_attrs["strokeWidth"] = linewidths
     # ---------- Construct visualization ------------
 
+    if x_axis_scale:
+        x_axis_scale = alt.Scale(domain=x_axis_scale)
+    else:
+        x_axis_scale = Undefined
+
     node_chart = node_chart.mark_point(**marker_attrs).encode(
-        x=alt.X("x", axis=alt.Axis(grid=False, labels=False, ticks=False)),
+        x=alt.X(
+            "x",
+            axis=alt.Axis(
+                title=x_axis_title,
+                grid=x_axis_grid,
+                labels=x_axis_labels,
+                ticks=x_axis_ticks,
+            ),
+            scale=x_axis_scale,
+        ),
         y=alt.Y("y", axis=alt.Axis(grid=False, labels=False, ticks=False)),
         **encoded_attrs
     )
