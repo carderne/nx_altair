@@ -1,9 +1,8 @@
-import numpy as np
 import altair as alt
 import networkx as nx
 
 from .core import to_pandas_edges, to_pandas_edges_arrows, to_pandas_nodes
-from ._utils import is_arraylike
+
 
 def draw_networkx_edges(
     G=None,
@@ -13,11 +12,12 @@ def draw_networkx_edges(
     edgelist=None,
     width=1,
     alpha=1.0,
-    edge_color='black',
+    edge_color="black",
     edge_cmap=None,
     tooltip=None,
     legend=False,
-    **kwargs):
+    **kwargs
+):
     """Draw the edges of the graph G.
 
     This draws only the edges of the graph G.
@@ -70,16 +70,15 @@ def draw_networkx_edges(
 
     # ---------- Handle arguments ------------
 
-    ###### node list argument
+    # node list argument
     if isinstance(edgelist, list):
         # Subset dataframe.
-        df_edges = df_edges.loc[df_edges['pair'].isin(edgelist)]
+        df_edges = df_edges.loc[df_edges["pair"].isin(edgelist)]
 
     elif edgelist is not None:
         raise Exception("nodelist must be a list or None.")
 
-
-    ###### Node size
+    # Node size
     if isinstance(width, str):
         encoded_attrs["size"] = alt.Size(width, legend=None)
 
@@ -89,7 +88,7 @@ def draw_networkx_edges(
     else:
         raise Exception("width must be a string or int.")
 
-    ###### node_color
+    # node_color
     if not isinstance(edge_color, str):
         raise Exception("edge_color must be a string.")
 
@@ -99,7 +98,7 @@ def draw_networkx_edges(
     else:
         marker_attrs["color"] = edge_color
 
-    ##### alpha
+    # alpha
     if isinstance(alpha, str):
         encoded_attrs["opacity"] = alpha
 
@@ -109,26 +108,25 @@ def draw_networkx_edges(
     elif alpha is not None:
         raise Exception("alpha must be a string or None.")
 
-    ##### alpha
+    # alpha
     if isinstance(edge_cmap, str):
         encoded_attrs["color"] = alt.Color(
-            edge_color,
-            scale=alt.Scale(scheme=edge_cmap, legend=None),
-            legend=None)
+            edge_color, scale=alt.Scale(scheme=edge_cmap, legend=None), legend=None
+        )
 
     elif edge_cmap is not None:
         raise Exception("edge_cmap must be a string (colormap name) or None.")
 
     if tooltip is not None:
-        encoded_attrs['tooltip'] = tooltip
+        encoded_attrs["tooltip"] = tooltip
 
     # ---------- Construct visualization ------------
 
     # Draw edges
     edge_chart = edge_chart.mark_line(**marker_attrs).encode(
-        x=alt.X('x', axis=alt.Axis(title='', grid=False, labels=False, ticks=False)),
-        y=alt.Y('y', axis=alt.Axis(title='', grid=False, labels=False, ticks=False)),
-        detail='edge',
+        x=alt.X("x", axis=alt.Axis(title="", grid=False, labels=False, ticks=False)),
+        y=alt.Y("y", axis=alt.Axis(title="", grid=False, labels=False, ticks=False)),
+        detail="edge",
         **encoded_attrs
     )
 
@@ -145,13 +143,14 @@ def draw_networkx_arrows(
     layer=None,
     edgelist=None,
     arrow_width=2,
-    arrow_length=.1,
+    arrow_length=0.1,
     alpha=1.0,
-    edge_color='black',
+    edge_color="black",
     edge_cmap=None,
     tooltip=None,
     legend=False,
-    **kwargs):
+    **kwargs
+):
     """Draw the edges of the graph G.
 
     This draws only the edges of the graph G.
@@ -207,16 +206,15 @@ def draw_networkx_arrows(
 
     # ---------- Handle arguments ------------
 
-    ###### node list argument
+    # node list argument
     if isinstance(edgelist, list):
         # Subset dataframe.
-        df_edge_arrows = df_edge_arrows.loc[df_edge_arrows['pair'].isin(edgelist)]
+        df_edge_arrows = df_edge_arrows.loc[df_edge_arrows["pair"].isin(edgelist)]
 
     elif edgelist is not None:
         raise Exception("nodelist must be a list or None.")
 
-
-    ###### Node size
+    # Node size
     if isinstance(arrow_width, str):
         encoded_attrs["size"] = alt.Size(arrow_width, legend=None)
 
@@ -226,7 +224,7 @@ def draw_networkx_arrows(
     else:
         raise Exception("arrow_width must be a string or int.")
 
-    ###### node_color
+    # node_color
     if not isinstance(edge_color, str):
         raise Exception("edge_color must be a string.")
 
@@ -236,7 +234,7 @@ def draw_networkx_arrows(
     else:
         marker_attrs["color"] = edge_color
 
-    ##### alpha
+    # alpha
     if isinstance(alpha, str):
         encoded_attrs["opacity"] = alpha
 
@@ -246,28 +244,25 @@ def draw_networkx_arrows(
     elif alpha is not None:
         raise Exception("alpha must be a string or None.")
 
-    ##### alpha
+    # alpha
     if isinstance(edge_cmap, str):
         encoded_attrs["color"] = alt.Color(
-            edge_color,
-            scale=alt.Scale(scheme=edge_cmap, legend=None),
-            legend=None)
+            edge_color, scale=alt.Scale(scheme=edge_cmap, legend=None), legend=None
+        )
 
     elif edge_cmap is not None:
         raise Exception("edge_cmap must be a string (colormap name) or None.")
 
     if tooltip is not None:
-        encoded_attrs['tooltip'] = tooltip
+        encoded_attrs["tooltip"] = tooltip
 
     # ---------- Construct visualization ------------
 
     # Draw edges
-    edge_chart = edge_chart.mark_line(
-        **marker_attrs
-    ).encode(
-        x=alt.X('x', axis=alt.Axis(grid=False, labels=False, ticks=False)),
-        y=alt.Y('y', axis=alt.Axis(grid=False, labels=False, ticks=False)),
-        detail='edge',
+    edge_chart = edge_chart.mark_line(**marker_attrs).encode(
+        x=alt.X("x", axis=alt.Axis(grid=False, labels=False, ticks=False)),
+        y=alt.Y("y", axis=alt.Axis(grid=False, labels=False, ticks=False)),
+        detail="edge",
         **encoded_attrs
     )
 
@@ -284,13 +279,13 @@ def draw_networkx_nodes(
     layer=None,
     nodelist=None,
     node_size=300,
-    node_color='red',
+    node_color="red",
     linewidths=1.0,
     alpha=1,
     cmap=None,
     tooltip=None,
     **kwargs
-    ):
+):
     """Draw the nodes of the graph G.
 
     This draws only the nodes of the graph G.
@@ -350,13 +345,12 @@ def draw_networkx_nodes(
         # Build a chart
         node_chart = alt.Chart(df_nodes)
 
-
     marker_attrs = {}
     encoded_attrs = {}
 
     # ---------- Handle arguments ------------
 
-    ###### node list argument
+    # node list argument
     if isinstance(nodelist, list):
         # Subset dataframe.
         df_nodes = df_nodes.loc[nodelist]
@@ -364,8 +358,7 @@ def draw_networkx_nodes(
     elif nodelist is not None:
         raise Exception("nodelist must be a list or None.")
 
-
-    ###### Node size
+    # Node size
     if isinstance(node_size, str):
         encoded_attrs["size"] = alt.Size(node_size, legend=None)
 
@@ -375,9 +368,9 @@ def draw_networkx_nodes(
     else:
         raise Exception("node_size must be a string or int.")
 
-    ###### node_color
+    # node_color
     if not isinstance(node_color, str):
-       raise Exception("node_color must be a string.")
+        raise Exception("node_color must be a string.")
 
     if node_color in df_nodes.columns:
         encoded_attrs["fill"] = node_color
@@ -385,7 +378,7 @@ def draw_networkx_nodes(
     else:
         marker_attrs["fill"] = node_color
 
-    ##### alpha
+    # alpha
     if isinstance(alpha, str):
         encoded_attrs["opacity"] = alpha
 
@@ -395,26 +388,22 @@ def draw_networkx_nodes(
     elif alpha is not None:
         raise Exception("alpha must be a string or None.")
 
-    ##### cmap
+    # cmap
     if isinstance(cmap, str):
-        encoded_attrs["fill"] = alt.Color(
-            node_color,
-            scale=alt.Scale(scheme=cmap))
+        encoded_attrs["fill"] = alt.Color(node_color, scale=alt.Scale(scheme=cmap))
 
     elif cmap is not None:
         raise Exception("cmap must be a string (colormap name) or None.")
 
     if tooltip is not None:
-        encoded_attrs['tooltip'] = tooltip
+        encoded_attrs["tooltip"] = tooltip
 
-    marker_attrs['strokeWidth'] = linewidths
+    marker_attrs["strokeWidth"] = linewidths
     # ---------- Construct visualization ------------
 
-    node_chart = node_chart.mark_point(
-        **marker_attrs
-    ).encode(
-        x=alt.X('x', axis=alt.Axis(grid=False, labels=False, ticks=False)),
-        y=alt.Y('y', axis=alt.Axis(grid=False, labels=False, ticks=False)),
+    node_chart = node_chart.mark_point(**marker_attrs).encode(
+        x=alt.X("x", axis=alt.Axis(grid=False, labels=False, ticks=False)),
+        y=alt.Y("y", axis=alt.Axis(grid=False, labels=False, ticks=False)),
         **encoded_attrs
     )
 
@@ -423,6 +412,7 @@ def draw_networkx_nodes(
 
     return node_chart
 
+
 def draw_networkx_labels(
     G=None,
     pos=None,
@@ -430,10 +420,10 @@ def draw_networkx_labels(
     layer=None,
     nodelist=None,
     font_size=15,
-    font_color='black',
-    node_label='label',
+    font_color="black",
+    node_label="label",
     **kwargs
-    ):
+):
     """Draw the nodes of the graph G.
 
     This draws only the nodes of the graph G.
@@ -483,13 +473,12 @@ def draw_networkx_labels(
         # Build a chart
         node_chart = alt.Chart(df_nodes)
 
-
     marker_attrs = {}
     encoded_attrs = {}
 
     # ---------- Handle arguments ------------
 
-    ###### node list argument
+    # node list argument
     if isinstance(nodelist, list):
         # Subset dataframe.
         df_nodes = df_nodes.loc[nodelist]
@@ -497,8 +486,7 @@ def draw_networkx_labels(
     elif nodelist is not None:
         raise Exception("nodelist must be a list or None.")
 
-
-    ###### Node size
+    # Node size
     if isinstance(font_size, str):
         encoded_attrs["size"] = alt.Size(font_size, legend=None)
 
@@ -508,9 +496,9 @@ def draw_networkx_labels(
     else:
         raise Exception("node_size must be a string or int.")
 
-    ###### node_color
+    # node_color
     if not isinstance(font_color, str):
-       raise Exception("node_color must be a string.")
+        raise Exception("node_color must be a string.")
 
     if font_color in df_nodes.columns:
         encoded_attrs["fill"] = font_color
@@ -518,15 +506,11 @@ def draw_networkx_labels(
     else:
         marker_attrs["fill"] = font_color
 
-
     # ---------- Construct visualization ------------
 
-    node_chart = node_chart.mark_text(
-        baseline='middle',
-        **marker_attrs
-    ).encode(
-        x=alt.X('x', axis=alt.Axis(grid=False, labels=False, ticks=False)),
-        y=alt.Y('y', axis=alt.Axis(grid=False, labels=False, ticks=False)),
+    node_chart = node_chart.mark_text(baseline="middle", **marker_attrs).encode(
+        x=alt.X("x", axis=alt.Axis(grid=False, labels=False, ticks=False)),
+        y=alt.Y("y", axis=alt.Axis(grid=False, labels=False, ticks=False)),
         text=node_label,
         **encoded_attrs
     )
@@ -536,6 +520,7 @@ def draw_networkx_labels(
 
     return node_chart
 
+
 def draw_networkx(
     G=None,
     pos=None,
@@ -543,21 +528,22 @@ def draw_networkx(
     nodelist=None,
     edgelist=None,
     node_size=300,
-    node_color='red',
+    node_color="red",
     node_label=None,
-    font_color='black',
+    font_color="black",
     font_size=15,
     alpha=1,
     cmap=None,
     linewidths=1.0,
     width=1,
     arrow_width=2,
-    arrow_length=.1,
-    edge_color='black',
-    arrow_color='black',
+    arrow_length=0.1,
+    edge_color="black",
+    arrow_color="black",
     node_tooltip=None,
     edge_tooltip=None,
-    edge_cmap=None):
+    edge_cmap=None,
+):
     """Draw the graph G using Altair.
 
     nodelist : list, optional (default G.nodes())
@@ -625,7 +611,7 @@ def draw_networkx(
         pos = nx.drawing.layout.spring_layout(G)
 
     # Draw edges
-    if len(G.edges())>0:
+    if len(G.edges()) > 0:
         edges = draw_networkx_edges(
             G,
             pos,
@@ -635,7 +621,7 @@ def draw_networkx(
             edge_color=edge_color,
             edge_cmap=edge_cmap,
             tooltip=edge_tooltip,
-            )
+        )
 
         if isinstance(G, nx.DiGraph):
             # Draw edges
@@ -649,10 +635,10 @@ def draw_networkx(
                 edge_color=arrow_color,
                 edge_cmap=edge_cmap,
                 tooltip=edge_tooltip,
-                )
+            )
 
     # Draw nodes
-    if len(G.nodes())>0:
+    if len(G.nodes()) > 0:
         nodes = draw_networkx_nodes(
             G,
             pos,
@@ -673,9 +659,8 @@ def draw_networkx(
                 nodelist=nodelist,
                 font_size=font_size,
                 font_color=font_color,
-                node_label=node_label
+                node_label=node_label,
             )
-
 
     # Layer the chart
     viz = []
